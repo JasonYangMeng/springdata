@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abcft.industrygraphmanagement.dao.mysql.ProductMapper">
+    <!--新增产品-->
+    <insert id="addProduct">
+       <![CDATA[
+            insert into  `product`
+            (
+                `id`,
+                `parent_id`,
+                `name`,
+                `create_entry`,
+                `industry_status`,
+                `product_tree_status`,
+                `artwork_status`,
+                `type`,
+                `audit_status`,
+                `create_user_id`,
+                `create_time`
+            )
+            values
+            (
+                #{productId},
+                #{parentId},
+                #{productName},
+                #{createEntry},
+                #{industryStatus},
+                #{productTreeStatus},
+                #{artworkStatus},
+                #{type},
+                #{auditStatus},
+                #{createUserId},
+                #{createTime}
+            )
+        ]]>
+    </insert>
+
+    <!--更改产品的区分类型和是否创建词条状态-->
+    <update id="updateProductById">
+        <![CDATA[
+            update `product`
+            set `create_entry` = #{createdEntry}, `type` = #{type}
+            where `id` = #{productEntryId}
+        ]]>
+    </update>
+
+    <!--修改产业链创建状态-->
+    <update id="updateIndustryStatusById">
+         update `product`
+            set `industry_status` ='1'
+            where `id` = #{productEntryId}
+    </update>
+    <!--修改产品族谱创建状态-->
+    <update id="updateProductTreeStatusById">
+         update `product`
+            set `product_tree_status` = '1'
+            where `id` = #{productEntryId}
+    </update>
+    <!--修改工艺图创建状态-->
+    <update id="updateArtworkStatusById">
+         update `product`
+            set `artwork_status` = '1'
+            where `id` = #{productEntryId}
+    </update>
+
+    <!--根据产品id修改产品名字-->
+    <update id="updateProductName">
+        update `product`
+        set `name` = #{productName}
+        where `id` = #{productId}
+    </update>
+
+    <!--修改产品状态-->
+    <update id="updateProductStatus">
+        update `product`
+        set `artwork_status` = '0',`create_entry` = '0',`industry_status` = '0',`product_tree_status` = '0'
+        where `id` = #{productId}
+    </update>
+
+    <!--根据产品名称精确查询产品表-->
+    <select id="queryProductNameAccurateList" parameterType="java.lang.String"
+            resultType="com.abcft.industrygraphmanagement.model.entity.ProductEntity">
+        <![CDATA[
+
+                    select `id` as productId,
+                           `name` as productName,
+                           `create_entry`,
+                           `industry_status`,
+                           `product_tree_status`,
+                           `artwork_status`,
+                           `audit_status`
+                    from `product`
+                    where `name` = #{name}
+                    limit 1;
+
+        ]]>
+    </select>
+
+    <!--根据产品名称模糊查询产品表前十条-->
+    <select id="queryProductNameListByName"
+            resultType="com.abcft.industrygraphmanagement.model.entity.ProductEntity">
+        select  `id` as productId,
+                `parent_id`,
+                `name` as productName,
+                `create_entry`,
+                `industry_status`,
+                `product_tree_status`,
+                `artwork_status`,
+                `type`,
+                `audit_status`,
+                `create_user_id`,
+                `create_time`
+        from `product`
+        where `name` like concat(#{productName},'%')
+        order by `name`
+        limit 10
+    </select>
+
+    <!--根据产品区分类型和产品名称  检索产品-->
+    <select id="queryProductNameListByTypeAndName"
+            resultType="com.abcft.industrygraphmanagement.model.entity.ProductEntity">
+        <![CDATA[
+            select * from(
+                select  `id` as productId,
+                        `name` as productName,
+                        `create_entry`,
+                        `industry_status`,
+                        `product_tree_status`,
+                        `artwork_status`,
+                        `type`,
+                        `audit_status`,
+                        `create_user_id`,
+                        `create_time`
+                from `product`
+                where `create_entry` = "0" and `name` like concat('%',#{productName},'%')
+                union
+                select  `id` as productId,
+                        `name`as productName,
+                        `create_entry`,
+                        `industry_status`,
+                        `product_tree_status`,
+                        `artwork_status`,
+                        `type`,
+                        `audit_status`,
+                        `create_user_id`,
+                        `create_time`
+                from `product`
+                where `create_entry` = "1" and `type` = #{type} and `name` like concat('%',#{productName},'%')
+            ) t
+            ORDER BY t.`create_entry` DESC, t.`productName`
+            limit 10
+        ]]>
+    </select>
+
+    <select id="queryProductByName" resultType="com.abcft.industrygraphmanagement.model.entity.ProductEntity">
+        select  `id` as productId,
+                        `name` as productName,
+                        `create_entry`,
+                        `industry_status`,
+                        `product_tree_status`,
+                        `artwork_status`,
+                        `type`,
+                        `audit_status`,
+                        `create_user_id`,
+                        `create_time`
+        from `product`
+        where `name` = #{name}
+    </select>
+</mapper>

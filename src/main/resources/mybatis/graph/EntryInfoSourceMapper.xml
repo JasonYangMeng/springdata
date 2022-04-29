@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abcft.industrygraphmanagement.dao.mysql.EntryInfoSourceMapper">
+
+    <!--新增词条信息源数据-->
+    <insert id="addEntryInfoSource" keyColumn="id" keyProperty="id"
+            parameterType="com.abcft.industrygraphmanagement.model.entity.EntryInfoSourceEntity"
+            useGeneratedKeys="true">
+        insert into entry_info_source
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.entryInfoSourceId},
+            #{item.entryId},
+            #{item.type},
+            #{item.key},
+            #{item.value},
+            #{item.link},
+            #{item.filePath},
+            #{item.fileName},
+            #{item.createUserId},
+            #{item.createTime}
+            )
+        </foreach>
+    </insert>
+
+    <!--单条保存词条来源-->
+    <insert id="addEntryInfoSource1" parameterType="com.abcft.industrygraphmanagement.model.entity.EntryInfoSourceEntity">
+        insert into entry_info_source
+        (`id`, `entry_id`, `type`, `key`, `value`, `link`, `file_path`, `file_name`, `create_user_id`, `create_time`)
+        values
+        (
+            #{entryInfoSourceId},
+            #{entryId},
+            #{type},
+            #{key},
+            #{value},
+            #{link},
+            #{filePath},
+            #{fileName},
+            #{createUserId},
+            #{createTime}
+        )
+    </insert>
+
+    <update id="updateEntryInfoSource1" parameterType="com.abcft.industrygraphmanagement.model.entity.EntryInfoSourceEntity">
+        update entry_info_source
+            set `entry_id` = #{entryId},
+            `type` = #{type},
+            `key` = #{key},
+            `value` = #{value},
+            `link` = #{link},
+            `file_path` = #{filePath},
+            `file_name` =#{fileName},
+            `create_user_id` = #{createUserId},
+            `create_time` = #{createTime}
+            where id = #{entryInfoSourceId}
+    </update>
+
+    <!--根据词条id来删除词条信息来源数据-->
+    <delete id="deleteEntryInfoSource">
+        delete from entry_info_source
+        where entry_id = #{entryId}
+    </delete>
+
+    <!--根据id查询列表-->
+    <select id="queryAllByEntryId" parameterType="java.lang.String"
+            resultType="com.abcft.industrygraphmanagement.model.entity.EntryInfoSourceEntity">
+    select  `id` as entryInfoSourceId,
+            `entry_id`,
+            `type`,
+            `key`,
+            `value`,
+            `link`,
+            `file_path`,
+            `file_name`,
+            `create_user_id`,
+            `create_time`
+     from entry_info_source
+    where entry_id=#{entryId}
+    </select>
+</mapper>

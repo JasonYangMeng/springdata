@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abcft.industrygraphmanagement.dao.mysql.EntryLinkMapper">
+
+    <!--添加词条链接-->
+    <insert id="addEntryLinkList">
+        insert into entry_link
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.id},
+                #{item.entryId},
+                #{item.type},
+                #{item.key},
+                #{item.value},
+                #{item.link},
+                #{item.linkType},
+                #{item.linkWord},
+                #{item.createUserId},
+                #{item.createTime}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="addEntryLink">
+        insert into entry_link
+        values
+            (
+                #{id},
+                #{entryId},
+                #{type},
+                #{key},
+                #{value},
+                #{link},
+                #{linkType},
+                #{linkWord},
+                #{createUserId},
+                #{createTime}
+            )
+    </insert>
+
+    <update id="updateEntryLink">
+        update entry_link
+        set `entry_id` = #{entryId},
+            `type` = #{type},
+            `key` = #{key},
+            `value` = #{value},
+            `link` = #{link},
+            `link_type` = #{linkType},
+            `link_word` = #{linkWord},
+            `create_user_id` = #{createUserId},
+            `create_time` = #{createTime}
+        where `id` = #{id}
+    </update>
+
+    <!--删除词条链接-->
+    <delete id="deleteEntryLinkList">
+        delete from entry_link
+        where entry_id = #{entryId}
+    </delete>
+
+    <!--查询最近添加链接-->
+    <select id="queryEntryLinkRecentlyList"
+            resultType="com.abcft.industrygraphmanagement.model.entity.EntryLinkEntity">
+        <![CDATA[
+            select id,
+                   entry_id,
+                   `type`,
+                   `key`,
+                   `value`,
+                   `link`,
+                   link_type,
+                   link_word,
+                   create_user_id,
+                   create_time
+            from entry_link
+            where create_user_id = #{createUserId}
+            order by create_time desc
+        ]]>
+    </select>
+
+    <!--查询内部链接-->
+    <select id="queryEntryLinkInnerList" parameterType="java.lang.String"
+            resultType="com.abcft.industrygraphmanagement.model.entity.EntryLinkEntity">
+        <![CDATA[
+            select `id`,
+                   `entry_id`,
+                   `type`,
+                   `key`,
+                   `value`,
+                   `link`,
+                   `link_type`,
+                   `link_word`,
+                   `create_user_id`,
+                   `create_time`
+            from entry_link
+            where link_type = '0' and value like concat(#{var}, "%")
+        ]]>
+    </select>
+
+    <select id="queryEntryLinkList"
+            resultType="com.abcft.industrygraphmanagement.model.entity.EntryLinkEntity">
+        <![CDATA[
+            select `id`,
+                   `entry_id`,
+                   `type`,
+                   `key`,
+                   `value`,
+                   `link`,
+                   `link_type`,
+                   `link_word`,
+                   `create_user_id`,
+                   `create_time`
+            from entry_link
+            where entry_id = #{entryId}
+        ]]>
+    </select>
+</mapper>

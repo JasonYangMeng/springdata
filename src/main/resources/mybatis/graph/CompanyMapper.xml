@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abcft.industrygraphmanagement.dao.mysql.CompanyMapper">
+
+    <insert id="addCompanyEntity">
+       insert into  `company` (id, name, create_time)
+        values ( #{companyId}, #{name}, #{createTime})
+    </insert>
+
+    <select id="queryCompanyNameList" parameterType="java.lang.String"
+            resultType="com.abcft.industrygraphmanagement.model.entity.CompanyEntity">
+        select `id` as companyId,
+               `name`,
+               `create_entry` as createEntry,
+               `registration_place`,
+               `main_business`
+        from company
+        <where>
+            <if test="var1 == null or var == ''">
+                and 1 != 1
+            </if>
+            <if test="var1 != null or var != ''">
+                and name like concat(#{var1},'%')
+            </if>
+        </where>
+        limit 10;
+    </select>
+
+    <!--修改公司创建状态-->
+    <update id="updateStatusById" parameterType="java.lang.String">
+        update company
+        set create_entry='1'
+        where id=#{id}
+    </update>
+
+    <!--修改公司创建状态-->
+    <update id="updateStatus" parameterType="java.lang.String">
+        update company
+        set create_entry='0'
+        where id=#{id}
+    </update>
+</mapper>

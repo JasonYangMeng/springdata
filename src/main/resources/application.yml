@@ -1,0 +1,17 @@
+logging:
+  level:
+    com.abcft.industrygraphmanagement.service: info
+  file: "logs/industrygraphmanagement.log"
+
+server:
+  port: 18070
+  tomcat.uri-encoding: UTF-8
+
+spring:
+  application:
+    name: industrygraphmanagement
+  profiles:
+    active: "@spring.profiles.active@"
+  mvc:
+    async:
+      request-timeout: 200000

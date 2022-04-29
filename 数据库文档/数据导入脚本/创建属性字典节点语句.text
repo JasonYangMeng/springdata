@@ -1,0 +1,13 @@
+UNWIND [
+        {name: "简介",uuid: "be85dd6f74b24d5bb30b7768be016ca4",nameEn: "introduction"},
+        {name: "股票名称",uuid: "16750346b0c34aafaea428b581a3e01a",nameEn: "stkName"},
+        {name: "行业",uuid: "62fbc2e2106c483d84b0693b3e866b92",nameEn: "industry"},
+        {name: "股票代码",uuid: "d1b3829ddec040cb8ad5878ae3c9b53c",nameEn: "tickerSymbol"},
+        {name: "别名",uuid: "b2ea3bb4cd1d4b59884609950ee5577a",nameEn: "aliasName"},
+        {name: "经营范围",uuid: "0dbdaa6706834f218ea823a82c50bdfd",nameEn: "scope"},
+        {name: "总市值",uuid: "4f4c6579f48b49398aed923ebed625c1",nameEn: "totalValue"},
+        {name: "销售毛利率",uuid: "fc31f94ea6a84743becff233b1bfe67d",nameEn: "gross_profit_margin"},
+        {name: "长期股权投资",uuid: "6e1458c1e0fc4c24b1f207264eac40d9",nameEn: "longEquityInvestment"},
+        {name: "电话",uuid: "96096b403fec48d4ba7301c8755b2cc3",nameEn: "tel"}
+       ] as row
+MERGE (n:PropertyValueDic {name:row.name, uuid:row.uuid, nameEn:row.nameEn})

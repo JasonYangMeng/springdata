@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    industrygraph:
+      url: jdbc:mysql://172.17.8.1:3306/industry_graph?useSSL=false&autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
+      username: myang
+      password: Abcft@2021!
+      driver-class-name: com.mysql.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 200MB
+  data:
+    neo4j:
+      uri: bolt://172.17.2.126:7687
+      username: neo4j
+      password: abc_123
+#图片文件存储地址
+file:
+  ip: 172.17.8.38
+  port: 21
+  username: ftpuser
+  pwd: rszgsw4Abcft2021qqtty

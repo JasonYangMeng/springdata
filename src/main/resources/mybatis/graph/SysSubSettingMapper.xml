@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abcft.industrygraphmanagement.dao.mysql.SysSubscribeSettingMapper">
+    <!--删除订阅-->
+    <delete id="deleteByUserIdAndTypeId" parameterType="java.lang.String">
+        delete from sys_subscribe_setting
+        where user_id = #{userId} and entry_id=#{entryId}
+    </delete>
+
+    <!--根据订阅人和词条统计数量-->
+    <select id="countSubscribe" parameterType="java.lang.String" resultType="integer">
+        select count(*)
+        from sys_subscribe_setting
+        where user_id = #{userId} and entry_id=#{entryId}
+    </select>
+
+    <!--查询列表-->
+    <select id="getListByCondition"
+            parameterType="com.abcft.industrygraphmanagement.model.condition.SysCollectCondition"
+            resultType="com.abcft.industrygraphmanagement.model.entity.SysSubscribeSettingEntity">
+        select * from sys_subscribe_setting
+        where user_id=#{userId}
+        <if test="typeName!=null and typeName!='' ">
+            and type_name like concat('%', #{typeName}, '%')
+        </if>
+        <if test="name != null and name != '' ">
+            and `name` like concat('%', #{name}, '%')
+        </if>
+        order by create_time desc
+        limit #{page},#{size}
+    </select>
+
+    <!--获取总数-->
+    <select id="totalByCondition" parameterType="com.abcft.industrygraphmanagement.model.condition.SysCollectCondition"
+            resultType="int">
+        select count(*) from sys_subscribe_setting
+        where user_id=#{userId}
+        <if test="typeName!=null and typeName!='' ">
+            and type_name like concat('%', #{typeName}, '%')
+        </if>
+        <if test="name != null and name != '' ">
+            and `name` like concat('%', #{name}, '%')
+        </if>
+    </select>
+    <!--添加-->
+    <insert id="add" parameterType="com.abcft.industrygraphmanagement.model.entity.SysSubscribeSettingEntity">
+        INSERT INTO sys_subscribe_setting(`id`, `name`, `entry_id`, `user_id`, `type_name`, remind,`create_time`)
+        VALUES
+            (
+            #{id},
+            #{name},
+            #{entryId},
+            #{userId},
+            #{typeName},
+            #{remind},
+            #{createTime}
+            )
+    </insert>
+</mapper>

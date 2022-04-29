@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abcft.industrygraphmanagement.dao.mysql.PersonMapper">
+
+    <!--保存人物信息-->
+    <insert id="savePerson" parameterType="com.abcft.industrygraphmanagement.model.entity.PersonEntity">
+        <![CDATA[
+                insert into `person`
+                    (
+                        `id`,
+                        `name`,
+                        `company_id`,
+                        `company_name`,
+                        `post`,
+                        `image_path`,
+                        `introduction`,
+                        `create_entry`,
+                        `create_user_id`,
+                        `create_time`
+                    )
+                values
+                    (
+                        #{personEntryId},
+                        #{name},
+                        #{companyEntryId},
+                        #{companyName},
+                        #{post},
+                        #{imagePath},
+                        #{introduction},
+                        #{createEntry},
+                        #{createUserId},
+                        #{createTime}
+                    )
+        ]]>
+    </insert>
+
+    <!--更新人物信息-->
+    <update id="updatePerson" parameterType="com.abcft.industrygraphmanagement.model.entity.PersonEntity">
+        <![CDATA[
+                update `person`
+                set `id` = #{personEntryId},
+                    `name` = #{name},
+                    `company_id` = #{companyEntryId},
+                    `company_name` = #{companyName},
+                    `post` = #{post},
+                    `image_path` = #{imagePath},
+                    `introduction` = #{introduction},
+                    `create_entry` = #{createEntry}
+                where `id` = #{personEntryId}
+        ]]>
+    </update>
+
+    <!--通过人物名称模糊查询人物信息-->
+    <select id="queryPersonByName" resultType="com.abcft.industrygraphmanagement.model.entity.PersonEntity">
+        <![CDATA[
+                select
+                    `id` as personEntryId,
+                    `name`,
+                    `company_id` as companyEntryId,
+                    `company_name` as companyName,
+                    `create_entry` as createEntry
+                from `person`
+                where `name` like concat('%', #{name}, '%')
+                limit 10
+        ]]>
+    </select>
+
+
+</mapper>

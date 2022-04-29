@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abcft.industrygraphmanagement.dao.mysql.SysDictionaryMapper">
+    <!-- 新增词条类型 -->
+    <insert id="addEntryList" parameterType="com.abcft.industrygraphmanagement.model.entity.SysDictionaryEntity">
+        INSERT INTO sys_dictionary(`id`, `parent_id`, `type`, `level`, `code`, `value`, `create_user_id`, `create_time`)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id},
+            #{item.parentId},
+            #{item.type},
+            #{item.level},
+            #{item.code},
+            #{item.value},
+            #{item.createUserId},
+            #{item.createTime}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 更新单个词条类型字典 -->
+    <update id="updateEntry" parameterType="com.abcft.industrygraphmanagement.model.entity.SysDictionaryEntity">
+        update  sys_dictionary
+        <set>
+            <if test="parentId != null and parentId !=''">
+                parent_id = #{parentId},
+            </if>
+            <if test="type != null and type != ''">
+                type = #{type},
+            </if>
+            <if test="level != null and level != ''">
+                level = #{level},
+            </if>
+            <if test="code != null and code != ''">
+                code = #{code},
+            </if>
+            <if test="value != null and value != ''">
+                value = #{value},
+            </if>
+            <if test="createUserId != null and createUserId != ''">
+                create_user_id = #{createUserId},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!-- 删除单个词条 -->
+    <delete id="delEntry" parameterType="java.lang.String">
+        delete from sys_dictionary
+        where id = #{id}
+    </delete>
+
+    <!--通过关系字典id 获取关系词条的关系类型-->
+    <select id="getRelationSysDictionaryList" parameterType="java.lang.String"
+            resultType="com.abcft.industrygraphmanagement.model.entity.SysDictionaryEntity">
+        <![CDATA[
+            select * from `sys_dictionary`
+            where `parent_id` =#{id}
+            order by `code`
+        ]]>
+    </select>
+
+    <select id="getSysDictionaryList"
+            resultType="com.abcft.industrygraphmanagement.model.entity.SysDictionaryEntity">
+        select * from sys_dictionary
+        where `level` =#{level}
+        order by code
+    </select>
+
+    <select id="getPostSysDictionaryList" resultType="java.lang.String">
+        select value
+        from sys_dictionary
+        where type = 'post'
+        <if test="name != null and name != '' ">
+            and value like concat('%', #{name}, '%')
+        </if>
+    </select>
+</mapper>
