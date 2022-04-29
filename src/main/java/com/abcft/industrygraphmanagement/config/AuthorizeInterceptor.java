@@ -22,6 +22,9 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private UserMapper userMapper;
 
+
+
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
